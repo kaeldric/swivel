@@ -20,6 +20,7 @@ function createChannel () {
       at: at
     };
     var postFromWorker = serialization.emission(internalEmitter, { broadcast: false });
+    navigator.serviceWorker.addEventListener('controllerchange', controllerChangeHandler);
     navigator.serviceWorker.addEventListener('message', broadcastHandler);
     return api;
 
@@ -49,6 +50,10 @@ function createChannel () {
       if (data && data.__broadcast) {
         serialization.emission(internalEmitter, { broadcast: true })(e);
       }
+    }
+
+    function controllerChangeHandler () {
+      worker = navigator.serviceWorker.controller;
     }
   }
 }
